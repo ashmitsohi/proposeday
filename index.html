@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Propose Day For Nushu Minni</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: #fce4ec;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Heart doodles background */
+      .hearts-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .heart-doodle {
+        position: absolute;
+        opacity: 0.15;
+        animation: floatHearts 25s infinite linear;
+      }
+
+      @keyframes floatHearts {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+        }
+        100% {
+          transform: translateY(-100vh) rotate(360deg);
+        }
+      }
+
+      /* Envelope container */
+      .envelope-container {
+        position: relative;
+        z-index: 10;
+        transform: translateY(150vh);
+        animation: slideEnvelopeUp 3s ease-out 3s forwards;
+        transition: opacity 0.8s ease;
+      }
+
+      .envelope-container.hide {
+        opacity: 0 !important;
+        pointer-events: none;
+      }
+
+      @keyframes slideEnvelopeUp {
+        to {
+          transform: translateY(0);
+        }
+      }
+
+      /* Envelope */
+      .envelope {
+        position: relative;
+        width: 350px;
+        height: 250px;
+        margin: 0 auto;
+      }
+
+      /* Envelope back */
+      .envelope-back {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+        border-radius: 0 0 10px 10px;
+        box-shadow: 0 10px 40px rgba(233, 30, 99, 0.3);
+        z-index: 1;
+      }
+
+      /* Envelope flap (the part that opens) */
+      .envelope-flap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 175px solid transparent;
+        border-right: 175px solid transparent;
+        border-top: 130px solid #f06292;
+        transform-origin: top center;
+        z-index: 3;
+        transition: transform 2s ease;
+        box-shadow: 0 -5px 20px rgba(233, 30, 99, 0.2);
+      }
+
+      .envelope-flap.open {
+        transform: rotateX(180deg);
+        animation: openFlap 2s ease forwards;
+      }
+
+      @keyframes openFlap {
+        0% {
+          transform: rotateX(0deg);
+        }
+        100% {
+          transform: rotateX(180deg);
+        }
+      }
+
+      /* Envelope front overlay */
+      .envelope-front {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 175px solid #ec407a;
+        border-right: 175px solid #ec407a;
+        border-bottom: 130px solid transparent;
+        z-index: 2;
+      }
+
+      /* Decorative heart seal */
+      .heart-seal {
+        position: absolute;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 50px;
+        z-index: 4;
+        animation: heartbeat 1.5s infinite;
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          transform: translateX(-50%) scale(1.1);
+        }
+      }
+
+      .heart-seal::before,
+      .heart-seal::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 26px;
+        height: 40px;
+        border-radius: 26px 26px 0 0;
+        background: #d81b60;
+      }
+
+      .heart-seal::before {
+        left: 0;
+        transform: rotate(-45deg);
+        transform-origin: 100% 100%;
+      }
+
+      .heart-seal::after {
+        left: 24px;
+        transform: rotate(45deg);
+        transform-origin: 0 100%;
+      }
+
+      /* Letter/Card inside envelope */
+      .letter {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+        height: 500px;
+        background: linear-gradient(135deg, #ffffff 0%, #fff0f5 100%);
+        border-radius: 15px;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+        z-index: 200;
+        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border: 3px solid #f8bbd0;
+        transition: opacity 1s ease;
+        pointer-events: none;
+      }
+
+      .letter.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* GIF/Video container */
+      .gif-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .gif-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      .gif-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      /* Title text */
+      .title {
+        position: fixed;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Great Vibes", cursive;
+        font-size: 5rem;
+        color: #c2185b;
+        text-align: center;
+        opacity: 0;
+        animation: fadeIn 2s ease forwards;
+        text-shadow: 0 0 20px rgba(194, 24, 91, 0.3);
+        z-index: 100;
+        transition: opacity 0.8s ease;
+      }
+
+      .title.hide {
+        opacity: 0 !important;
+        pointer-events: none;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .subtitle {
+        position: fixed;
+        top: 130px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Playfair Display", serif;
+        font-size: 1.5rem;
+        color: #880e4f;
+        text-align: center;
+        opacity: 0;
+        animation: fadeIn 2s ease 0.5s forwards;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-weight: 600;
+        z-index: 100;
+        transition: opacity 0.8s ease;
+      }
+
+      .subtitle.hide {
+        opacity: 0 !important;
+        pointer-events: none;
+      }
+
+      /* Message after GIF appears */
+      .proposal-message {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Playfair Display", serif;
+        font-size: 1.8rem;
+        color: #c2185b;
+        text-align: center;
+        opacity: 0;
+        font-style: italic;
+        font-weight: 600;
+        text-shadow: 0 2px 10px rgba(194, 24, 91, 0.2);
+        z-index: 100;
+        max-width: 80%;
+      }
+
+      .proposal-message.show {
+        animation: fadeInUp 1.5s ease forwards;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .envelope {
+          width: 280px;
+          height: 200px;
+        }
+
+        .envelope-back {
+          height: 160px;
+        }
+
+        .envelope-flap {
+          border-left: 140px solid transparent;
+          border-right: 140px solid transparent;
+          border-top: 104px solid #f06292;
+        }
+
+        .envelope-front {
+          border-left: 140px solid #ec407a;
+          border-right: 140px solid #ec407a;
+          border-bottom: 104px solid transparent;
+        }
+
+        .letter {
+          width: 90vw;
+          height: 90vw;
+          max-width: 400px;
+          max-height: 400px;
+        }
+
+        .title {
+          font-size: 3.5rem;
+          top: 30px;
+        }
+
+        .subtitle {
+          font-size: 1.2rem;
+          top: 110px;
+        }
+
+        .proposal-message {
+          font-size: 1.4rem;
+          bottom: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Heart doodles background -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Title -->
+    <h1 class="title">Humpy Propose Day</h1>
+    <h2 class="subtitle">Kya tum meko love karti ho?</h2>
+
+    <!-- Envelope -->
+    <div class="envelope-container" id="envelopeContainer">
+      <div class="envelope">
+        <div class="envelope-back"></div>
+        <div class="envelope-flap" id="envelopeFlap"></div>
+        <div class="envelope-front"></div>
+        <div class="heart-seal"></div>
+
+        <!-- Letter/Card with GIF -->
+        <div class="letter" id="letter">
+          <div class="gif-container">
+            <img id="proposalGif" src="" alt="Proposal" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proposal message -->
+    <p class="proposal-message" id="proposalMessage">
+      Will you be my jatti forever? 💍
+    </p>
+
+    <script>
+      // Create heart doodles
+      function createHeartDoodles() {
+        const container = document.getElementById("heartsContainer");
+        const heartShapes = ["❤️", "💕", "💖", "💗", "💓", "💝"];
+
+        for (let i = 0; i < 25; i++) {
+          const heart = document.createElement("div");
+          heart.className = "heart-doodle";
+          heart.innerHTML =
+            heartShapes[Math.floor(Math.random() * heartShapes.length)];
+          heart.style.left = Math.random() * 100 + "%";
+          heart.style.fontSize = Math.random() * 30 + 20 + "px";
+          heart.style.animationDelay = Math.random() * 25 + "s";
+          heart.style.animationDuration = Math.random() * 10 + 20 + "s";
+          container.appendChild(heart);
+        }
+      }
+
+      // Animation timeline
+      function startAnimation() {
+        const title = document.querySelector(".title");
+        const subtitle = document.querySelector(".subtitle");
+        const envelope = document.getElementById("envelopeContainer");
+        const envelopeFlap = document.getElementById("envelopeFlap");
+        const letter = document.getElementById("letter");
+        const gif = document.getElementById("proposalGif");
+        const message = document.getElementById("proposalMessage");
+
+        // Step 1: After 3 seconds, envelope starts sliding up (CSS animation handles this)
+        // Step 2: When envelope shows up (at 6 seconds), hide title and subtitle
+        setTimeout(() => {
+          title.classList.add("hide");
+          subtitle.classList.add("hide");
+        }, 6000);
+
+        // Step 3: After 3 more seconds (at 9 seconds), open envelope
+        setTimeout(() => {
+          envelopeFlap.classList.add("open");
+
+          // Step 4: After envelope opens (at 10.5 seconds), show gif and hide envelope
+          setTimeout(() => {
+            // Hide envelope
+            envelope.classList.add("show");
+
+            // Show gif card
+            letter.classList.add("show");
+
+            // Set GIF source
+            gif.src = "/video_1.gif";
+
+            // Show message after gif appears
+            setTimeout(() => {
+              message.classList.add("show");
+            }, 1000);
+          }, 1500);
+        }, 9000);
+      }
+
+      // Initialize
+      createHeartDoodles();
+      startAnimation();
+    </script>
+  </body>
+</html>
